@@ -2,6 +2,7 @@
   <div id="list">
     <div id="nav">
       <li @click="changeView('guanzhu')">我的关注</li>
+      <li @click="changeView('notice')">消息中心</li>
       <li @click="changeView('dingdan')">
         <span>dingdan</span>
         <!-- 下弹菜单 -->
@@ -19,12 +20,13 @@
 </template>
 <script>
 import guanzhu from "@/views/list/guanzhu";
+import notice from "@/views/list/notice";
 import dingdan from "@/views/list/dingdan";
 import slider from "@/views/slider";
 import swiper from "@/views/swiper";
 import navList from "@/views/list/navList";
 export default {
-  components: { guanzhu, dingdan, slider, swiper, navList },
+  components: { guanzhu, dingdan, slider, swiper, navList,notice },
   data() {
     return {
       currentView: "guanzhu"

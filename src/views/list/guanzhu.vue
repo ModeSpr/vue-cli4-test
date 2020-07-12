@@ -16,7 +16,7 @@
             <span class="num">{{item.click}}</span>
           </p>
         </div>
-        <div class="btn_gz flex-center">已关注</div>
+        <div class="btn_gz flex-center">取消关注</div>
       </li>
     </ul>
     <ul v-else class="list2">
@@ -103,6 +103,7 @@ export default {
 .list1 {
   display: grid;
   grid-template-columns: 500px 500px;
+  gap: 30px 50px;
   // grid-template-columns: 1fr 1fr;
   .item {
     display: flex;
@@ -137,11 +138,12 @@ export default {
     }
     .btn_gz {
       margin-left: auto;
-      width: 78px;
+      width: 90px;
       height: 30px;
       border: 2px solid #1d2087;
       color: #1d2087;
       border-radius: 30px;
+      cursor: pointer;
     }
   }
 }
