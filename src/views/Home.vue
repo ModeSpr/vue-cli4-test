@@ -1,33 +1,14 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <p>用户名：{{user.username}}</p>
-    <p>用户名：{{user.tel}}</p>
+    <img alt="Vue logo" src="../assets/logo.png" />
   </div>
 </template>
 
 <script>
+// @ is an alias to /src
 
 export default {
-  name: 'Home',
-  components: {
-    // HelloWorld
-  },
-  data() {
-    return {
-      user:{}
-    };
-  },
-  created() {
-    // console.log('process.env.BASE_URL',process.env.BASE_URL);
-    this.getInfo()
-  },
-  methods: {
-    getInfo(){
-      this.$store.dispatch("user/getInfo").then(data => {
-        this.user =data;
-      });
-    }
-  }
-}
+  name: "Home",
+  components: {}
+};
 </script>
