@@ -72,24 +72,24 @@ module.exports = {
       postcss: {
         plugins: [
           autoprefixer(),
-          // pxtorem({
-          //   rootValue: 37.5, // 设计稿宽375。37.5是 vant 默认大小
-          //   unitPrecision: 5, // 转换成rem后保留的小数点位数
-          //   propList: ["*", '!font-size*'], // 将被转换的属性列表, ['*', '!border*']
-          //   selectorBlackList: [], // 要忽略的选择器，保留为px
-          //   replace: true, // 替换包含rems的规则，而不添加后备
-          //   mediaQuery: true, // 允许在媒体查询中转换px
-          //   minPixelValue: 2, // 要替换的最小像素值
-          //   exclude: /node_modules/i // 要忽略并保留为px的文件路径
-          // })
+          pxtorem({
+            rootValue: 37.5, // 设计稿宽375。37.5是 vant 默认大小
+            unitPrecision: 5, // 转换成rem后保留的小数点位数
+            propList: ["*", '!font-size*'], // 将被转换的属性列表, ['*', '!border*']
+            selectorBlackList: [], // 要忽略的选择器，保留为px
+            replace: true, // 替换包含rems的规则，而不添加后备
+            mediaQuery: true, // 允许在媒体查询中转换px
+            minPixelValue: 2, // 要替换的最小像素值
+            exclude: /node_modules/i // 要忽略并保留为px的文件路径
+          })
         ]
       },
-      // less: {
-      //   //  修改less变量：https://github.com/youzan/vant/issues/6029
-      //   modifyVars: {
-      //     "button-primary-background-color": "#000"
-      //   }
-      // }
+      less: {
+        //  修改less变量：https://github.com/youzan/vant/issues/6029
+        modifyVars: {
+          "button-primary-background-color": "#000"
+        }
+      }
     },
     extract: {
       ignoreOrder: true // 忽略 css 引入顺序警告
