@@ -4,9 +4,19 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/rem">Rem</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  name: 'app',
+  mounted() {
+    let version = process.env.BUILD_VERSION
+    console.log('版本(BUILD_VERSION)：', new Date(version))
+  }
+}
+</script>
 
 <style lang="less">
 #app {

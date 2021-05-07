@@ -4,29 +4,29 @@
  */
 // yarn add -D postcss-pxtorem compression-webpack-plugin script-ext-html-webpack-plugin image-webpack-loader
 
-const path = require("path");
+const path = require('path')
 
 function resolve(dir) {
-  return path.join(__dirname, dir);
+  return path.join(__dirname, dir)
 }
 // 是否为生产环境
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production'
 
 // 将单位转化为 rem，文档：https://github.com/cuth/postcss-pxtorem
 // 行内样式不会转换
-const pxtorem = require("postcss-pxtorem");
+const pxtorem = require('postcss-pxtorem')
 
 // 适配不同浏览器样式
-const autoprefixer = require("autoprefixer");
+const autoprefixer = require('autoprefixer')
 
 // gzip压缩
-const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 // 代码压缩 uglifyjs-webpack-plugin 不支持es6， vue-cli 自带 terser-webpack-plugin
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin')
 
 // 抽离注入
-const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 
 // CDN 资源
 // const cdn = {
@@ -45,7 +45,7 @@ const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = {
   lintOnSave: true,
-  outputDir: "dist",
+  outputDir: 'dist',
   productionSourceMap: false, //  加速生产环境构建
   devServer: {
     port: 9999
@@ -60,11 +60,11 @@ module.exports = {
   },
   pwa: {
     iconPaths: {
-      favicon32: "favicon.ico",
-      favicon16: "favicon.ico",
-      appleTouchIcon: "favicon.ico",
-      maskIcon: "favicon.ico",
-      msTileImage: "favicon.ico"
+      favicon32: 'favicon.ico',
+      favicon16: 'favicon.ico',
+      appleTouchIcon: 'favicon.ico',
+      maskIcon: 'favicon.ico',
+      msTileImage: 'favicon.ico'
     }
   },
   css: {
@@ -75,7 +75,7 @@ module.exports = {
           pxtorem({
             rootValue: 37.5, // 设计稿宽375。37.5是 vant 默认大小
             unitPrecision: 5, // 转换成rem后保留的小数点位数
-            propList: ["*", '!font-size*'], // 将被转换的属性列表, ['*', '!border*']
+            propList: ['*', '!font-size*'], // 将被转换的属性列表, ['*', '!border*']
             selectorBlackList: [], // 要忽略的选择器，保留为px
             replace: true, // 替换包含rems的规则，而不添加后备
             mediaQuery: true, // 允许在媒体查询中转换px
@@ -87,7 +87,7 @@ module.exports = {
       less: {
         //  修改less变量：https://github.com/youzan/vant/issues/6029
         modifyVars: {
-          "button-primary-background-color": "#000"
+          'button-primary-background-color': '#000'
         }
       }
     },
@@ -105,11 +105,14 @@ module.exports = {
     //   })
 
     // 设置别名
-    config.resolve.alias
-      .set("@", resolve("src"))
-      .set("styles", resolve("src/styles"));
+    config.resolve.alias.set('@', resolve('src')).set('styles', resolve('src/styles'))
 
     if (isProduction) {
+      // 版本时间 webpack.DefinePlugin
+      config.plugin('define').tap(args => {
+        args[0]['process.env'].BUILD_VERSION = +new Date()
+        return args
+      })
       // cdn 注入
       // config.plugin('html')
       //   .tap(args => {
@@ -127,10 +130,10 @@ module.exports = {
       //   .end()
 
       // 把 runtime 从 preload 去除
-      config.plugin("preload").tap(args => {
-        args[0].fileBlacklist.push(/runtime~.+\.js$/); // 正则匹配runtime文件名，去除该文件的preload
-        return args;
-      });
+      config.plugin('preload').tap(args => {
+        args[0].fileBlacklist.push(/runtime~.+\.js$/) // 正则匹配runtime文件名，去除该文件的preload
+        return args
+      })
 
       // 移除 prefetch 插件
       // config.plugins.delete('prefetch')
@@ -144,13 +147,14 @@ module.exports = {
       // 分析打包文件 npm run build --report
       if (process.env.npm_config_report) {
         config
-          .plugin("webpack-bundle-analyzer")
-          .use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin)
-          .end();
+          .plugin('webpack-bundle-analyzer')
+          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+          .end()
       }
     }
   },
 
+  // webpack配置的新增与修改
   configureWebpack: config => {
     if (isProduction) {
       // 生成环境取消打包的依赖，改为cdn
@@ -159,27 +163,27 @@ module.exports = {
       // gzip 压缩
       config.plugins.push(
         new CompressionWebpackPlugin({
-          algorithm: "gzip",
+          algorithm: 'gzip',
           test: /\.js$|\.html$|.\css/, // 匹配文件名
           threshold: 10240, // 对超过10k的数据压缩
           minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
           deleteOriginalAssets: false // 不删除原文件
         })
-      );
+      )
 
       // 抽离 runtime
       config.plugins.push(
         new ScriptExtHtmlWebpackPlugin({
           inline: /runtime~.+\.js$/ // 正则匹配runtime文件名
         })
-      );
+      )
 
       // webpack 优化
       config.optimization = {
         runtimeChunk: true, // 'single', // 单独抽离，利用缓存优化
         // 公共代码抽离
         splitChunks: {
-          chunks: "all", // 代码块类型 “initial”（初始化） | “all”(默认就是 all) | async （动态加载）
+          chunks: 'all', // 代码块类型 “initial”（初始化） | “all”(默认就是 all) | async （动态加载）
           minSize: 200000, // （默认是30000）生成块的最小大小（以字节为单位）
           minChunks: 2, // （默认是1）在分割之前，这个代码块最小应该被引用的次数
           name: true,
@@ -214,12 +218,12 @@ module.exports = {
               compress: {
                 drop_debugger: true, // remove debugger
                 // drop_console: true,           // 注释console.*
-                pure_funcs: ["console.log"] // 移除 console.log
+                pure_funcs: ['console.log'] // 移除 console.log
               }
             }
           })
         ]
-      };
+      }
     }
   }
-};
+}
